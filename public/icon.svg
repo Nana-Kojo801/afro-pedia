@@ -1,0 +1,22 @@
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AfroPedia icon">
+  <!-- Warm brown circular background -->
+  <circle cx="256" cy="256" r="256" fill="#5C3D2E"/>
+
+  <!-- Afro puff — large white circle representing the hair -->
+  <circle cx="256" cy="210" r="155" fill="#FFFFFF"/>
+
+  <!-- White handle extending below the afro puff -->
+  <rect x="230" y="318" width="52" height="144" rx="26" fill="#FFFFFF"/>
+
+  <!-- Tine gaps (brown cutouts through the white afro = visible comb teeth) -->
+  <!-- 4 gaps creating 5 teeth; centered at x=256, spanning x=175 to x=337 -->
+  <!-- Each gap: w=16, h=118, rx=8; teeth: w=22, gaps: w=16, pattern=22+16+22+16+22+16+22+16+22=174 -->
+  <!-- Gaps start at x: 197, 235, 273, 311 -->
+  <rect x="197" y="68" width="16" height="118" rx="8" fill="#5C3D2E"/>
+  <rect x="235" y="56" width="16" height="130" rx="8" fill="#5C3D2E"/>
+  <rect x="273" y="56" width="16" height="130" rx="8" fill="#5C3D2E"/>
+  <rect x="311" y="68" width="16" height="118" rx="8" fill="#5C3D2E"/>
+
+  <!-- Grip knob at bottom of handle — small brown circle for visual finish -->
+  <circle cx="256" cy="450" r="20" fill="#5C3D2E"/>
+</svg>
