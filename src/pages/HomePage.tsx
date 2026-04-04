@@ -40,7 +40,7 @@ export function HomePage() {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-ivory via-ivory to-ivory-dark pt-16 pb-20">
-        <div className="absolute inset-0 opacity-[0.03]" style={{
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{
           backgroundImage: `radial-gradient(circle at 2px 2px, #2C1810 1px, transparent 0)`,
           backgroundSize: '32px 32px'
         }} />
@@ -204,12 +204,12 @@ export function HomePage() {
 
       {/* CTA Banner */}
       <section className="py-20 bg-mahogany relative overflow-hidden">
-        <div className="absolute inset-0 opacity-5" style={{
+        <div className="absolute inset-0 opacity-5 pointer-events-none" style={{
           backgroundImage: `radial-gradient(circle at 2px 2px, #FAF7F2 1px, transparent 0)`,
           backgroundSize: '24px 24px'
         }} />
-        <div className="absolute right-0 top-0 w-96 h-96 rounded-full bg-terracotta/10 -translate-y-1/2 translate-x-1/3" />
-        <div className="absolute left-0 bottom-0 w-64 h-64 rounded-full bg-amber/10 translate-y-1/2 -translate-x-1/3" />
+        <div className="absolute right-0 top-0 w-96 h-96 rounded-full bg-terracotta/10 -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+        <div className="absolute left-0 bottom-0 w-64 h-64 rounded-full bg-amber/10 translate-y-1/2 -translate-x-1/3 pointer-events-none" />
 
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <p className="text-amber text-sm font-semibold uppercase tracking-widest mb-4">Start Your Journey</p>

@@ -267,7 +267,7 @@ export function GlossaryPage() {
       {/* Page header */}
       <div className="bg-mahogany py-12 sm:py-16 relative overflow-hidden">
         <div
-          className="absolute inset-0 opacity-5"
+          className="absolute inset-0 opacity-5 pointer-events-none"
           style={{
             backgroundImage: `radial-gradient(circle at 2px 2px, #FAF7F2 1px, transparent 0)`,
             backgroundSize: '24px 24px',
