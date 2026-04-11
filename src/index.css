@@ -57,10 +57,16 @@ h1, h2, h3, h4, h5, h6 {
 /* ─── Dark mode ─────────────────────────────────────────────────────────── */
 
 html.dark {
-  /* Override custom theme variables used in bg-* / border-* utilities */
-  --color-ivory: #140C08;
+  /* --color-ivory is intentionally NOT overridden here.
+     text-ivory is used as light text on dark (bg-mahogany) headers/footer,
+     so it must stay as its original light value (#FAF7F2).
+     bg-ivory is handled by a class-level override below instead.
+
+     --color-ivory-dark is safe to override: it is only used for borders
+     and hover backgrounds, never as a text colour. */
   --color-ivory-dark: #221410;
-  --color-surface: #1E130E;
+
+  /* Secondary/muted text colours — lighten for legibility on dark bg */
   --color-brown-mid: #B89080;
   --color-brown-light: #907060;
 }
@@ -76,10 +82,12 @@ html.dark .text-mahogany {
   color: #EDE0D8;
 }
 
-/* bg-white is a default Tailwind color, not a custom CSS var */
-html.dark .bg-white {
-  background-color: #1E130E;
-}
+/* Page / section backgrounds */
+html.dark .bg-ivory    { background-color: #140C08; }
+html.dark .bg-surface  { background-color: #1E130E; }
+
+/* bg-white is a default Tailwind color (not a CSS var) */
+html.dark .bg-white    { background-color: #1E130E; }
 
 /* Navbar */
 html.dark nav.sticky {
@@ -98,10 +106,5 @@ html.dark input[type="text"]::placeholder {
 }
 
 /* Scrollbar */
-html.dark ::-webkit-scrollbar-track {
-  background: #1E1008;
-}
-
-html.dark ::-webkit-scrollbar-thumb {
-  background: #5A3A2E;
-}
+html.dark ::-webkit-scrollbar-track { background: #1E1008; }
+html.dark ::-webkit-scrollbar-thumb { background: #5A3A2E; }
