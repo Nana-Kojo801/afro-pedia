@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Search, Menu } from 'lucide-react'
+import { Search, Menu, Sun, Moon } from 'lucide-react'
 import { Button } from './ui/Button'
 import { AfroPediaIcon } from './AfroPediaIcon'
 import {
@@ -9,11 +9,21 @@ import {
   SheetHeader,
   SheetTitle,
 } from './ui/Sheet'
+import { useTheme } from '../context/ThemeContext'
+import { useFontSize, type FontSize } from '../context/FontSizeContext'
+
+const fontSizeOptions: { value: FontSize; label: string; className: string }[] = [
+  { value: 'sm', label: 'A', className: 'text-xs' },
+  { value: 'md', label: 'A', className: 'text-sm' },
+  { value: 'lg', label: 'A', className: 'text-base' },
+]
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const navigate = useNavigate()
+  const { theme, toggleTheme } = useTheme()
+  const { fontSize, setFontSize } = useFontSize()
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -68,6 +78,34 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
+
+            {/* Font size controls */}
+            <div className="flex items-center gap-0.5" aria-label="Font size">
+              {fontSizeOptions.map(({ value, label, className }) => (
+                <button
+                  key={value}
+                  onClick={() => setFontSize(value)}
+                  aria-label={`Font size ${value}`}
+                  className={`${className} w-7 h-7 flex items-center justify-center rounded font-semibold transition-colors
+                    ${fontSize === value
+                      ? 'text-terracotta bg-terracotta/10'
+                      : 'text-brown-mid hover:text-terracotta hover:bg-terracotta/10'
+                    }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            {/* Theme toggle */}
+            <button
+              onClick={toggleTheme}
+              aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              className="w-8 h-8 flex items-center justify-center rounded-full text-brown-mid hover:text-terracotta hover:bg-terracotta/10 transition-colors"
+            >
+              {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
+            </button>
+
             <Button variant="primary" size="sm" onClick={() => navigate('/hair-types')}>
               Explore Hair Types
             </Button>
@@ -125,7 +163,37 @@ export function Navbar() {
               ))}
             </nav>
 
-            <div className="border-t border-ivory-dark pt-4">
+            {/* Font size + theme controls */}
+            <div className="border-t border-ivory-dark pt-4 flex items-center justify-between">
+              <div className="flex items-center gap-1">
+                <span className="text-xs text-brown-light mr-1.5">Size</span>
+                {fontSizeOptions.map(({ value, label, className }) => (
+                  <button
+                    key={value}
+                    onClick={() => setFontSize(value)}
+                    aria-label={`Font size ${value}`}
+                    className={`${className} w-8 h-8 flex items-center justify-center rounded font-semibold transition-colors
+                      ${fontSize === value
+                        ? 'text-terracotta bg-terracotta/10'
+                        : 'text-brown-mid hover:text-terracotta hover:bg-terracotta/10'
+                      }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                onClick={toggleTheme}
+                aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-brown-mid hover:bg-terracotta/10 hover:text-terracotta transition-colors"
+              >
+                {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+                {theme === 'dark' ? 'Light mode' : 'Dark mode'}
+              </button>
+            </div>
+
+            <div>
               <Button
                 variant="primary"
                 size="md"

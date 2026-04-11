@@ -53,3 +53,55 @@ h1, h2, h3, h4, h5, h6 {
   background: #A0786A;
   border-radius: 3px;
 }
+
+/* ─── Dark mode ─────────────────────────────────────────────────────────── */
+
+html.dark {
+  /* Override custom theme variables used in bg-* / border-* utilities */
+  --color-ivory: #140C08;
+  --color-ivory-dark: #221410;
+  --color-surface: #1E130E;
+  --color-brown-mid: #B89080;
+  --color-brown-light: #907060;
+}
+
+html.dark body {
+  background-color: #140C08;
+  color: #EDE0D8;
+}
+
+/* text-mahogany is dark brown — invert for readability.
+   Cannot change --color-mahogany because bg-mahogany (footer) must stay dark. */
+html.dark .text-mahogany {
+  color: #EDE0D8;
+}
+
+/* bg-white is a default Tailwind color, not a custom CSS var */
+html.dark .bg-white {
+  background-color: #1E130E;
+}
+
+/* Navbar */
+html.dark nav.sticky {
+  background-color: #1E130E !important;
+  border-color: #2A1810 !important;
+}
+
+/* Inputs */
+html.dark input[type="text"] {
+  background-color: #221410 !important;
+  color: #EDE0D8 !important;
+}
+
+html.dark input[type="text"]::placeholder {
+  color: #70504A !important;
+}
+
+/* Scrollbar */
+html.dark ::-webkit-scrollbar-track {
+  background: #1E1008;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: #5A3A2E;
+}
