@@ -84,8 +84,8 @@ function ProductCard({ product }: { product: Product }) {
   return (
     <div className="bg-white rounded-2xl border border-ivory-dark hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 flex flex-col overflow-hidden group">
       {/* Product image area */}
-      <div className={`${accent.bg} h-44 flex items-center justify-center relative`}>
-        <div className={`w-20 h-20 rounded-2xl ${accent.bg} border-2 ${accent.border} flex items-center justify-center`}>
+      <div className={`${accent.bg} h-44 flex items-center justify-center relative flex-shrink-0`}>
+        <div className={`w-20 h-20 rounded-2xl bg-white/60 border-2 ${accent.border} flex items-center justify-center`}>
           {product.category === 'kit' ? (
             <FlaskConical size={36} className={accent.text} />
           ) : product.category === 'oil' ? (
@@ -112,20 +112,22 @@ function ProductCard({ product }: { product: Product }) {
         )}
       </div>
 
-      {/* Content */}
-      <div className="flex flex-col flex-1 p-4 gap-3">
+      {/* Scrolling content — grows to fill available space */}
+      <div className="flex flex-col flex-1 p-4 pb-0 gap-2">
         {/* Brand + category */}
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-brown-light uppercase tracking-wider">{product.brand}</span>
-          <span className={`text-xs px-2 py-0.5 rounded-full ${accent.bg} ${accent.text} font-medium`}>
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-xs font-semibold text-brown-light uppercase tracking-wider truncate">
+            {product.brand}
+          </span>
+          <span className={`text-xs px-2 py-0.5 rounded-full ${accent.bg} ${accent.text} font-medium flex-shrink-0`}>
             {CATEGORY_LABELS[product.category]}
           </span>
         </div>
 
-        {/* Name */}
+        {/* Name — fixed 2-line height so cards align */}
         <h3
           style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
-          className="text-mahogany font-semibold text-base leading-snug line-clamp-2"
+          className="text-mahogany font-semibold text-base leading-snug line-clamp-2 min-h-[2.75rem]"
         >
           {product.name}
         </h3>
@@ -159,32 +161,32 @@ function ProductCard({ product }: { product: Product }) {
             </li>
           ))}
         </ul>
+      </div>
 
-        {/* Price + CTA */}
-        <div className="mt-auto pt-2 flex items-center justify-between gap-3">
-          <div>
-            <span
-              style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
-              className="text-xl font-bold text-mahogany"
-            >
-              ${product.price.toFixed(2)}
-            </span>
-            {product.originalPrice && (
-              <span className="text-xs text-brown-light line-through ml-1.5">
-                ${product.originalPrice.toFixed(2)}
-              </span>
-            )}
-          </div>
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={handleAddToCart}
-            className="flex items-center gap-1.5 flex-shrink-0"
+      {/* Price + CTA — always anchored to the card bottom */}
+      <div className="p-4 pt-3 mt-3 border-t border-ivory-dark flex items-center justify-between gap-2 flex-shrink-0">
+        <div className="flex items-baseline gap-1.5 min-w-0">
+          <span
+            style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
+            className="text-xl font-bold text-mahogany"
           >
-            <ShoppingCart size={13} />
-            Add to Cart
-          </Button>
+            ${product.price.toFixed(2)}
+          </span>
+          {product.originalPrice && (
+            <span className="text-xs text-brown-light line-through">
+              ${product.originalPrice.toFixed(2)}
+            </span>
+          )}
         </div>
+        <Button
+          variant="primary"
+          size="sm"
+          onClick={handleAddToCart}
+          className="flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap"
+        >
+          <ShoppingCart size={13} />
+          Add to Cart
+        </Button>
       </div>
     </div>
   )
