@@ -462,68 +462,249 @@ export const marketplaceProducts: Product[] = [
 
 export interface SiteFeedback {
   id: string
-  name: string
-  rating: number
-  comment: string
+  name?: string
+  category: 'bug' | 'feature' | 'content' | 'general'
+  subject: string
+  message: string
   date: string
   hairType?: string
-  helpful: number
 }
 
 export const siteFeedbackData: SiteFeedback[] = [
   {
     id: 'fb-1',
     name: 'Adaeze M.',
-    rating: 5,
-    comment: "AfroPedia has genuinely transformed how I care for my hair. The hair type guides are incredibly detailed and I finally understand what my 4C hair actually needs. Can't recommend enough!",
+    category: 'general',
+    subject: 'This platform has changed how I care for my hair',
+    message: "AfroPedia has genuinely transformed my hair care routine. The hair type guides are incredibly detailed and I finally understand what my 4C hair actually needs. Keep it up!",
     date: 'March 2025',
     hairType: '4C',
-    helpful: 47,
   },
   {
     id: 'fb-2',
-    name: 'Kezia T.',
-    rating: 5,
-    comment: 'The articles are so well researched. I love how everything is broken down by hair type — no more guessing which advice applies to me. The LOC method guide alone saved my wash days.',
-    date: 'February 2025',
-    hairType: '4B',
-    helpful: 38,
+    category: 'feature',
+    subject: 'Bookmarking articles would be very useful',
+    message: "I keep coming back to the same articles but can't easily find them again. A bookmarks or 'save for later' feature would make a big difference — especially on mobile.",
+    date: 'March 2025',
   },
   {
     id: 'fb-3',
     name: 'Simone B.',
-    rating: 4,
-    comment: 'Beautiful site and really helpful content. I\'d love to see more articles about transitioning from relaxed to natural hair. The porosity guide was a game-changer for my 3C curls.',
+    category: 'content',
+    subject: 'More content on transitioning from relaxed to natural',
+    message: "I'm currently transitioning and there's very little guidance for that in-between phase. A dedicated section or article series on the transition journey would be really helpful.",
     date: 'February 2025',
     hairType: '3C',
-    helpful: 29,
   },
   {
     id: 'fb-4',
     name: 'Nadia O.',
-    rating: 5,
-    comment: 'I stumbled across AfroPedia looking for scalp care advice and I have not left since! The glossary is brilliant for understanding all those ingredient names on product labels.',
+    category: 'bug',
+    subject: 'Search bar redirects but shows no results',
+    message: "When I search for something on mobile it takes me to the Hair Types page but doesn't actually filter anything. Seems like the search result isn't being applied. Using Chrome on Android.",
     date: 'January 2025',
     hairType: '4A',
-    helpful: 22,
   },
   {
     id: 'fb-5',
-    name: 'Chiamaka E.',
-    rating: 4,
-    comment: 'Really solid platform. The dark mode works great and I appreciate the font size option — I read it on my phone during commutes. Would love a bookmarking feature for articles.',
+    category: 'content',
+    subject: 'Need more 3A and 3B specific articles',
+    message: "Most of the content focuses on 4C hair which is great, but those of us with 3A/3B curls also need guidance. Would love to see more articles targeted at looser curl patterns.",
     date: 'January 2025',
-    hairType: '4C',
-    helpful: 18,
+    hairType: '3A',
   },
   {
     id: 'fb-6',
     name: 'Fatou D.',
-    rating: 5,
-    comment: 'Finally a hair care resource that celebrates natural African hair textures rather than treating them as a problem to fix. The writing is respectful, knowledgeable and empowering.',
+    category: 'general',
+    subject: 'Finally a platform that celebrates African hair textures',
+    message: 'This is the first hair care resource I have found that treats natural African hair textures with real respect and expertise. The writing is empowering, not apologetic. Thank you.',
     date: 'December 2024',
     hairType: '4B',
-    helpful: 55,
+  },
+]
+
+export interface Dermatologist {
+  id: string
+  name: string
+  title: string
+  clinic: string
+  city: string
+  country: string
+  address: string
+  phone: string
+  specialties: string[]
+  conditions: string[]
+  languages: string[]
+  acceptingPatients: boolean
+  about: string
+}
+
+export const dermatologists: Dermatologist[] = [
+  {
+    id: 'derm-1',
+    name: 'Dr. Amara Okonkwo',
+    title: 'MD, FWACP (Dermatology)',
+    clinic: 'Lagos Skin & Hair Centre',
+    city: 'Lagos',
+    country: 'Nigeria',
+    address: 'Plot 14, Adeola Odeku St, Victoria Island, Lagos',
+    phone: '+234 801 234 5678',
+    specialties: ['Traction Alopecia', 'Scalp Conditions', 'Hair Loss'],
+    conditions: ['Alopecia', 'Seborrhoeic Dermatitis', 'Traction Alopecia', 'Scalp Psoriasis'],
+    languages: ['English', 'Yoruba', 'Igbo'],
+    acceptingPatients: true,
+    about: 'Specialist in hair and scalp disorders with over 12 years of experience treating natural and textured hair. Dr. Okonkwo is particularly focused on traction alopecia prevention in women of African descent.',
+  },
+  {
+    id: 'derm-2',
+    name: 'Dr. Kofi Mensah',
+    title: 'MBChB, MSc Dermatology',
+    clinic: 'Accra Dermatology & Laser Clinic',
+    city: 'Accra',
+    country: 'Ghana',
+    address: '22 Cantonments Rd, Accra',
+    phone: '+233 302 789 012',
+    specialties: ['Natural Hair Care', 'Scalp Conditions', 'Paediatric Dermatology'],
+    conditions: ['Eczema', 'Folliculitis', 'Dandruff', 'Hair Breakage'],
+    languages: ['English', 'Twi', 'Ga'],
+    acceptingPatients: true,
+    about: 'Dr. Mensah combines modern dermatology with knowledge of traditional African hair practices. He regularly conducts community education sessions on scalp health for natural hair wearers.',
+  },
+  {
+    id: 'derm-3',
+    name: 'Dr. Wanjiru Kamau',
+    title: 'MBBCh, Dip. Dermatology',
+    clinic: 'Nairobi Hair & Scalp Specialists',
+    city: 'Nairobi',
+    country: 'Kenya',
+    address: 'Westlands Medical Centre, Ring Rd, Nairobi',
+    phone: '+254 720 345 678',
+    specialties: ['Hair Loss & Alopecia', 'Scalp Conditions', 'Traction Alopecia'],
+    conditions: ['Central Centrifugal Cicatricial Alopecia', 'Traction Alopecia', 'Tinea Capitis'],
+    languages: ['English', 'Swahili', 'Kikuyu'],
+    acceptingPatients: false,
+    about: 'Leading researcher in Central Centrifugal Cicatricial Alopecia (CCCA) in East Africa. Dr. Kamau works closely with hair stylists and trichologists to offer integrated scalp care plans.',
+  },
+  {
+    id: 'derm-4',
+    name: 'Dr. Yewande Adeyemi',
+    title: 'MBBS, FMCP (Dermatology)',
+    clinic: 'Abuja Specialist Hospital — Dermatology Unit',
+    city: 'Abuja',
+    country: 'Nigeria',
+    address: '3 Hospital Rd, Garki II, Abuja',
+    phone: '+234 703 456 7890',
+    specialties: ['Hair Loss & Alopecia', 'Natural Hair Care', 'Scalp Conditions'],
+    conditions: ['Alopecia Areata', 'Androgenetic Alopecia', 'Scalp Acne', 'Dry Scalp'],
+    languages: ['English', 'Yoruba', 'Hausa'],
+    acceptingPatients: true,
+    about: 'Dr. Adeyemi has a special interest in female pattern hair loss and alopecia areata, with a patient-centred approach that considers cultural hair practices and styling choices.',
+  },
+  {
+    id: 'derm-5',
+    name: 'Dr. Thandi Dlamini',
+    title: 'MBBCh, FCDerm (SA)',
+    clinic: 'Joburg Hair & Skin Institute',
+    city: 'Johannesburg',
+    country: 'South Africa',
+    address: '78 Jan Smuts Ave, Parktown, Johannesburg',
+    phone: '+27 11 234 5678',
+    specialties: ['Traction Alopecia', 'Hair Loss & Alopecia', 'Paediatric Dermatology'],
+    conditions: ['Traction Alopecia', 'CCCA', 'Cradle Cap', 'Scalp Fungal Infections'],
+    languages: ['English', 'Zulu', 'Xhosa'],
+    acceptingPatients: true,
+    about: 'A leading voice on alopecia in South African women, Dr. Dlamini advocates for early intervention and runs free community hair health screenings in Soweto twice a year.',
+  },
+  {
+    id: 'derm-6',
+    name: 'Dr. Isabelle Ngozi Pierre',
+    title: 'MD, DES Dermatologie',
+    clinic: 'Clinique du Cheveu Afro — Paris',
+    city: 'Paris',
+    country: 'France',
+    address: '45 Rue de la Roquette, 75011 Paris',
+    phone: '+33 1 45 67 89 01',
+    specialties: ['Natural Hair Care', 'Scalp Conditions', 'Hair Loss & Alopecia'],
+    conditions: ['Seborrhoeic Dermatitis', 'Alopecia', 'Sensitive Scalp', 'Breakage'],
+    languages: ['French', 'English', 'Lingala'],
+    acceptingPatients: true,
+    about: "One of Paris's few dermatologists specialising exclusively in Afro-textured hair. Dr. Pierre bridges French medical dermatology with a deep cultural understanding of Black hair care traditions.",
+  },
+  {
+    id: 'derm-7',
+    name: 'Dr. Marcus Thompson',
+    title: 'MD, FAAD',
+    clinic: 'Atlanta Center for Textured Hair Health',
+    city: 'Atlanta',
+    country: 'United States',
+    address: '300 Peachtree St NE, Suite 12, Atlanta, GA',
+    phone: '+1 404 678 9012',
+    specialties: ['Hair Loss & Alopecia', 'Scalp Conditions', 'Traction Alopecia'],
+    conditions: ['CCCA', 'Traction Alopecia', 'Seborrhoeic Dermatitis', 'Alopecia Areata'],
+    languages: ['English'],
+    acceptingPatients: true,
+    about: 'Board-certified dermatologist and one of the leading researchers in hair disorders affecting Black patients in the US. Dr. Thompson publishes widely on CCCA and traction alopecia.',
+  },
+  {
+    id: 'derm-8',
+    name: 'Dr. Aaliyah Johnson',
+    title: 'MD, MS Trichology',
+    clinic: 'Harlem Hair Health Clinic',
+    city: 'New York',
+    country: 'United States',
+    address: '220 W 125th St, Suite 4, New York, NY',
+    phone: '+1 212 345 6789',
+    specialties: ['Natural Hair Care', 'Traction Alopecia', 'Paediatric Dermatology'],
+    conditions: ['Traction Alopecia', 'Hair Porosity Issues', 'Scalp Dryness', 'Protective Style Damage'],
+    languages: ['English', 'Spanish'],
+    acceptingPatients: false,
+    about: "Dr. Johnson's practice focuses entirely on patients with natural, relaxed, and loc'd hair. She is a frequent speaker at natural hair conferences and advocates for culturally competent dermatology.",
+  },
+  {
+    id: 'derm-9',
+    name: 'Dr. Fatimah Al-Rashid',
+    title: 'MBBS, MRCP (UK), Dip. Trichology',
+    clinic: 'London Afro Hair & Scalp Clinic',
+    city: 'London',
+    country: 'United Kingdom',
+    address: '14 Coldharbour Lane, Brixton, London SE5',
+    phone: '+44 20 7946 0321',
+    specialties: ['Scalp Conditions', 'Hair Loss & Alopecia', 'Natural Hair Care'],
+    conditions: ['CCCA', 'Alopecia Areata', 'Scalp Psoriasis', 'Post-Partum Hair Loss'],
+    languages: ['English', 'Arabic', 'French'],
+    acceptingPatients: true,
+    about: "Based in Brixton, Dr. Al-Rashid runs one of London's busiest clinics dedicated to Afro and mixed-textured hair. She offers a holistic approach including dietary and lifestyle consultations alongside dermatological treatment.",
+  },
+  {
+    id: 'derm-10',
+    name: 'Dr. Aisha Diallo',
+    title: 'MD, Certificat Dermatologie',
+    clinic: 'Centre Médical Dermatologie Dakar',
+    city: 'Dakar',
+    country: 'Senegal',
+    address: 'Avenue Cheikh Anta Diop, Dakar',
+    phone: '+221 33 869 1234',
+    specialties: ['Scalp Conditions', 'Natural Hair Care', 'Paediatric Dermatology'],
+    conditions: ['Ringworm / Tinea Capitis', 'Scalp Folliculitis', 'Dryness & Breakage', 'Eczema'],
+    languages: ['French', 'Wolof', 'English'],
+    acceptingPatients: true,
+    about: 'Dr. Diallo is renowned in West Africa for her work on tinea capitis in children and for promoting scalp hygiene education in schools across Senegal.',
+  },
+  {
+    id: 'derm-11',
+    name: 'Dr. Grace Osei',
+    title: 'MD, FRCPC (Dermatology)',
+    clinic: 'Toronto Multicultural Skin & Hair Clinic',
+    city: 'Toronto',
+    country: 'Canada',
+    address: '200 Spadina Ave, Suite 301, Toronto, ON',
+    phone: '+1 416 789 0123',
+    specialties: ['Hair Loss & Alopecia', 'Scalp Conditions', 'Traction Alopecia'],
+    conditions: ['Traction Alopecia', 'Alopecia Areata', 'CCCA', 'Scalp Inflammation'],
+    languages: ['English', 'Twi', 'French'],
+    acceptingPatients: true,
+    about: 'Dr. Osei brings a multicultural perspective to hair dermatology, treating patients from diverse African, Caribbean, and South Asian backgrounds. She is known for her empathetic, education-focused consultations.',
   },
 ]
 

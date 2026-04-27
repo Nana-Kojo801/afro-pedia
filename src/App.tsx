@@ -9,6 +9,7 @@ import { ArticlesPage } from './pages/ArticlesPage'
 import { GlossaryPage } from './pages/GlossaryPage'
 import { MarketplacePage } from './pages/MarketplacePage'
 import { FeedbackPage } from './pages/FeedbackPage'
+import { DermatologistPage } from './pages/DermatologistPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { ThemeProvider } from './context/ThemeContext'
 import { FontSizeProvider } from './context/FontSizeContext'
@@ -29,6 +30,7 @@ function App() {
                 <Route path="/glossary" element={<GlossaryPage />} />
                 <Route path="/marketplace" element={<MarketplacePage />} />
                 <Route path="/feedback" element={<FeedbackPage />} />
+                <Route path="/dermatologist" element={<DermatologistPage />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </main>

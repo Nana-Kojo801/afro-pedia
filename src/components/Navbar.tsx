@@ -37,6 +37,7 @@ export function Navbar() {
     { label: 'Articles', to: '/articles' },
     { label: 'Glossary', to: '/glossary' },
     { label: 'Marketplace', to: '/marketplace' },
+    { label: 'Dermatologist', to: '/dermatologist' },
     { label: 'Feedback', to: '/feedback' },
   ]
 

@@ -1,169 +1,114 @@
 import { useState } from 'react'
-import { Star, ThumbsUp, ChevronRight, MessageSquare, Send, BarChart3 } from 'lucide-react'
+import { MessageSquare, Send, ChevronRight, Bug, Lightbulb, BookOpen, Heart, Tag } from 'lucide-react'
 import { Button } from '../components/ui/Button'
 import { siteFeedbackData, type SiteFeedback } from '../data/mockData'
 import { toast } from 'sonner'
 
-const HAIR_TYPE_OPTIONS = ['Select hair type', '3A', '3B', '3C', '4A', '4B', '4C', 'Other / Not sure']
+const HAIR_TYPE_OPTIONS = ['Select hair type (optional)', '3A', '3B', '3C', '4A', '4B', '4C', 'Other / Not sure']
 
-const AVERAGE_RATING = (() => {
-  const sum = siteFeedbackData.reduce((acc, f) => acc + f.rating, 0)
-  return sum / siteFeedbackData.length
-})()
+type Category = SiteFeedback['category']
 
-const RATING_DISTRIBUTION = [5, 4, 3, 2, 1].map((star) => ({
-  star,
-  count: siteFeedbackData.filter((f) => f.rating === star).length,
-}))
+const CATEGORIES: { value: Category; label: string; description: string }[] = [
+  { value: 'bug',     label: 'Bug / Problem',       description: 'Something is broken or not working' },
+  { value: 'feature', label: 'Feature Request',      description: 'Something you\'d like us to add' },
+  { value: 'content', label: 'Content Suggestion',   description: 'Articles, topics, or info gaps' },
+  { value: 'general', label: 'General Feedback',     description: 'Anything else on your mind' },
+]
 
-function StarInput({
-  value,
-  onChange,
-  size = 28,
-}: {
-  value: number
-  onChange: (v: number) => void
-  size?: number
-}) {
-  const [hovered, setHovered] = useState(0)
-  return (
-    <div className="flex items-center gap-1">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <button
-          key={star}
-          type="button"
-          onClick={() => onChange(star)}
-          onMouseEnter={() => setHovered(star)}
-          onMouseLeave={() => setHovered(0)}
-          aria-label={`Rate ${star} stars`}
-          className="transition-transform hover:scale-110"
-        >
-          <Star
-            size={size}
-            className={
-              star <= (hovered || value)
-                ? 'fill-amber text-amber'
-                : 'text-ivory-dark fill-ivory-dark'
-            }
-          />
-        </button>
-      ))}
-    </div>
-  )
+const CATEGORY_META: Record<Category, { icon: React.ReactNode; bg: string; text: string; border: string }> = {
+  bug:     { icon: <Bug size={14} />,       bg: 'bg-red-50',        text: 'text-red-600',       border: 'border-red-200' },
+  feature: { icon: <Lightbulb size={14} />, bg: 'bg-amber/10',      text: 'text-amber',         border: 'border-amber/30' },
+  content: { icon: <BookOpen size={14} />,  bg: 'bg-terracotta/10', text: 'text-terracotta',    border: 'border-terracotta/20' },
+  general: { icon: <Heart size={14} />,     bg: 'bg-mahogany/10',   text: 'text-brown-mid',     border: 'border-mahogany/20' },
 }
 
-function FeedbackCard({
-  feedback,
-  onHelpful,
-}: {
-  feedback: SiteFeedback
-  onHelpful: (id: string) => void
-}) {
+function FeedbackItem({ item }: { item: SiteFeedback }) {
+  const meta = CATEGORY_META[item.category]
+  const catLabel = CATEGORIES.find((c) => c.value === item.category)?.label ?? item.category
+
   return (
-    <div className="bg-white rounded-2xl border border-ivory-dark p-6 flex flex-col gap-4 hover:shadow-md transition-shadow">
+    <div className="bg-white rounded-2xl border border-ivory-dark p-5 flex flex-col gap-3 hover:shadow-sm transition-shadow">
       {/* Header */}
       <div className="flex items-start justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-terracotta/10 flex items-center justify-center flex-shrink-0">
-            <span
-              style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
-              className="text-terracotta font-bold text-base"
-            >
-              {feedback.name.charAt(0)}
+        <div className="flex items-center gap-2.5">
+          <div className="w-9 h-9 rounded-full bg-terracotta/10 flex items-center justify-center flex-shrink-0">
+            <span style={{ fontFamily: '"Playfair Display", Georgia, serif' }} className="text-terracotta font-bold text-sm">
+              {item.name ? item.name.charAt(0) : '?'}
             </span>
           </div>
           <div>
-            <p className="font-semibold text-mahogany text-sm">{feedback.name}</p>
-            <p className="text-brown-light text-xs">{feedback.date}</p>
+            <p className="font-semibold text-mahogany text-sm">{item.name ?? 'Anonymous'}</p>
+            <p className="text-brown-light text-xs">{item.date}</p>
           </div>
         </div>
-        {feedback.hairType && (
-          <span className="text-[11px] bg-terracotta/10 text-terracotta font-semibold px-2.5 py-0.5 rounded-full flex-shrink-0">
-            {feedback.hairType}
+        <div className="flex items-center gap-1.5 flex-shrink-0">
+          {item.hairType && (
+            <span className="text-[11px] bg-ivory-dark text-brown-mid font-medium px-2 py-0.5 rounded-full">
+              {item.hairType}
+            </span>
+          )}
+          <span className={`flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full border ${meta.bg} ${meta.text} ${meta.border}`}>
+            {meta.icon}
+            {catLabel}
           </span>
-        )}
+        </div>
       </div>
 
-      {/* Stars */}
-      <div className="flex items-center gap-1">
-        {[1, 2, 3, 4, 5].map((s) => (
-          <Star
-            key={s}
-            size={14}
-            className={s <= feedback.rating ? 'fill-amber text-amber' : 'text-ivory-dark fill-ivory-dark'}
-          />
-        ))}
-      </div>
+      {/* Subject */}
+      <p className="font-semibold text-mahogany text-sm">{item.subject}</p>
 
-      {/* Comment */}
-      <p className="text-brown-mid text-sm leading-relaxed">{feedback.comment}</p>
-
-      {/* Helpful */}
-      <div className="pt-2 border-t border-ivory-dark flex items-center gap-2">
-        <button
-          onClick={() => onHelpful(feedback.id)}
-          className="flex items-center gap-1.5 text-xs text-brown-light hover:text-terracotta transition-colors group"
-        >
-          <ThumbsUp size={13} className="group-hover:fill-terracotta/20 transition-all" />
-          Helpful ({feedback.helpful})
-        </button>
-      </div>
+      {/* Message */}
+      <p className="text-brown-mid text-sm leading-relaxed">{item.message}</p>
     </div>
   )
 }
 
 export function FeedbackPage() {
-  const [reviews, setReviews] = useState<SiteFeedback[]>(siteFeedbackData)
+  const [items, setItems] = useState<SiteFeedback[]>(siteFeedbackData)
   const [name, setName] = useState('')
-  const [hairType, setHairType] = useState('Select hair type')
-  const [rating, setRating] = useState(0)
-  const [comment, setComment] = useState('')
-  const [submitted, setSubmitted] = useState(false)
-
-  const handleHelpful = (id: string) => {
-    setReviews((prev) =>
-      prev.map((f) => (f.id === id ? { ...f, helpful: f.helpful + 1 } : f))
-    )
-  }
+  const [hairType, setHairType] = useState(HAIR_TYPE_OPTIONS[0])
+  const [category, setCategory] = useState<Category | ''>('')
+  const [subject, setSubject] = useState('')
+  const [message, setMessage] = useState('')
+  const [activeFilter, setActiveFilter] = useState<Category | 'all'>('all')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!name.trim()) {
-      toast.error('Please enter your name.')
+    if (!category) {
+      toast.error('Please choose a feedback category.')
       return
     }
-    if (rating === 0) {
-      toast.error('Please select a star rating.')
+    if (!subject.trim()) {
+      toast.error('Please add a short subject line.')
       return
     }
-    if (comment.trim().length < 20) {
-      toast.error('Please write at least 20 characters.')
+    if (message.trim().length < 20) {
+      toast.error('Please write at least 20 characters in your message.')
       return
     }
 
-    const newFeedback: SiteFeedback = {
+    const newItem: SiteFeedback = {
       id: `fb-new-${Date.now()}`,
-      name: name.trim(),
-      rating,
-      comment: comment.trim(),
+      name: name.trim() || undefined,
+      category: category as Category,
+      subject: subject.trim(),
+      message: message.trim(),
       date: new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' }),
-      hairType: hairType !== 'Select hair type' ? hairType : undefined,
-      helpful: 0,
+      hairType: hairType !== HAIR_TYPE_OPTIONS[0] ? hairType : undefined,
     }
 
-    setReviews((prev) => [newFeedback, ...prev])
+    setItems((prev) => [newItem, ...prev])
     setName('')
-    setHairType('Select hair type')
-    setRating(0)
-    setComment('')
-    setSubmitted(true)
-    toast.success('Thank you for your feedback!', {
-      description: 'Your review helps us improve AfroPedia.',
+    setHairType(HAIR_TYPE_OPTIONS[0])
+    setCategory('')
+    setSubject('')
+    setMessage('')
+    toast.success('Feedback submitted — thank you!', {
+      description: 'We read every message and use it to improve AfroPedia.',
     })
-    setTimeout(() => setSubmitted(false), 4000)
   }
 
-  const ratingLabel = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent']
+  const filtered = activeFilter === 'all' ? items : items.filter((i) => i.category === activeFilter)
 
   return (
     <div className="min-h-screen bg-ivory">
@@ -180,185 +125,197 @@ export function FeedbackPage() {
             className="text-4xl sm:text-5xl font-bold mb-4 leading-tight"
           >
             Share Your
-            <span className="text-terracotta"> Experience</span>
+            <span className="text-terracotta"> Thoughts</span>
           </h1>
           <p className="text-white/70 text-lg max-w-2xl leading-relaxed">
-            Your feedback shapes AfroPedia. Tell us what's working, what could be better, and
-            what you'd love to see next.
+            Spotted a bug? Have an idea? Want to suggest new content? We read every message — your
+            feedback directly shapes how AfroPedia grows.
           </p>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
 
-          {/* ── Left column: stats + form ──────────────────────────────────── */}
-          <div className="lg:col-span-1 space-y-8">
-
-            {/* Overall rating card */}
-            <div className="bg-white rounded-2xl border border-ivory-dark p-6">
-              <div className="flex items-center gap-2 mb-5">
-                <BarChart3 size={18} className="text-terracotta" />
-                <h2
-                  style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
-                  className="text-lg font-bold text-mahogany"
-                >
-                  Overall Rating
-                </h2>
-              </div>
-
-              <div className="flex items-end gap-3 mb-4">
-                <span
-                  style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
-                  className="text-6xl font-bold text-mahogany leading-none"
-                >
-                  {AVERAGE_RATING.toFixed(1)}
-                </span>
-                <div className="pb-1">
-                  <div className="flex items-center gap-0.5 mb-1">
-                    {[1, 2, 3, 4, 5].map((s) => (
-                      <Star
-                        key={s}
-                        size={16}
-                        className={s <= Math.round(AVERAGE_RATING) ? 'fill-amber text-amber' : 'text-ivory-dark fill-ivory-dark'}
-                      />
-                    ))}
-                  </div>
-                  <p className="text-brown-light text-xs">{reviews.length} reviews</p>
-                </div>
-              </div>
-
-              {/* Star distribution bars */}
-              <div className="space-y-2">
-                {RATING_DISTRIBUTION.map(({ star, count }) => {
-                  const pct = Math.round((count / siteFeedbackData.length) * 100)
-                  return (
-                    <div key={star} className="flex items-center gap-2 text-xs">
-                      <span className="text-brown-light w-4 text-right">{star}</span>
-                      <Star size={10} className="fill-amber text-amber flex-shrink-0" />
-                      <div className="flex-1 bg-ivory-dark rounded-full h-2 overflow-hidden">
-                        <div
-                          className="h-full bg-amber rounded-full transition-all"
-                          style={{ width: `${pct}%` }}
-                        />
-                      </div>
-                      <span className="text-brown-light w-6">{pct}%</span>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-
-            {/* Feedback form */}
-            <div className="bg-white rounded-2xl border border-ivory-dark p-6">
-              <div className="flex items-center gap-2 mb-5">
+          {/* ── Left: form ─────────────────────────────────────────────────── */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-2xl border border-ivory-dark p-6 sticky top-24">
+              <div className="flex items-center gap-2 mb-6">
                 <MessageSquare size={18} className="text-terracotta" />
                 <h2
                   style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
                   className="text-lg font-bold text-mahogany"
                 >
-                  Leave a Review
+                  Send Us Feedback
                 </h2>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
-                {/* Name */}
+                {/* Category picker */}
+                <div>
+                  <label className="block text-xs font-semibold text-brown-mid mb-2 uppercase tracking-wide">
+                    Category *
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {CATEGORIES.map((cat) => {
+                      const meta = CATEGORY_META[cat.value]
+                      const selected = category === cat.value
+                      return (
+                        <button
+                          key={cat.value}
+                          type="button"
+                          onClick={() => setCategory(cat.value)}
+                          className={`text-left p-3 rounded-xl border-2 transition-all ${
+                            selected
+                              ? `${meta.bg} ${meta.border} ${meta.text}`
+                              : 'border-ivory-dark hover:border-brown-light bg-ivory'
+                          }`}
+                        >
+                          <div className={`flex items-center gap-1.5 font-semibold text-xs mb-0.5 ${selected ? meta.text : 'text-mahogany'}`}>
+                            {meta.icon}
+                            {cat.label}
+                          </div>
+                          <p className="text-[11px] text-brown-light leading-snug">{cat.description}</p>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+
+                {/* Subject */}
                 <div>
                   <label className="block text-xs font-semibold text-brown-mid mb-1.5 uppercase tracking-wide">
-                    Your Name *
+                    Subject *
                   </label>
                   <input
                     type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="e.g. Adaeze M."
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    placeholder="Brief summary of your feedback"
+                    maxLength={100}
                     className="w-full px-4 py-2.5 text-sm rounded-xl border border-ivory-dark bg-ivory focus:outline-none focus:border-terracotta focus:ring-1 focus:ring-terracotta text-mahogany placeholder:text-brown-light transition-all"
                   />
                 </div>
 
-                {/* Hair type */}
+                {/* Message */}
                 <div>
                   <label className="block text-xs font-semibold text-brown-mid mb-1.5 uppercase tracking-wide">
-                    Hair Type
-                  </label>
-                  <select
-                    value={hairType}
-                    onChange={(e) => setHairType(e.target.value)}
-                    className="w-full px-4 py-2.5 text-sm rounded-xl border border-ivory-dark bg-ivory focus:outline-none focus:border-terracotta focus:ring-1 focus:ring-terracotta text-mahogany transition-all appearance-none cursor-pointer"
-                  >
-                    {HAIR_TYPE_OPTIONS.map((opt) => (
-                      <option key={opt} value={opt}>{opt}</option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Star rating */}
-                <div>
-                  <label className="block text-xs font-semibold text-brown-mid mb-2 uppercase tracking-wide">
-                    Your Rating *
-                  </label>
-                  <div className="flex items-center gap-3">
-                    <StarInput value={rating} onChange={setRating} size={26} />
-                    {rating > 0 && (
-                      <span className="text-sm text-amber font-medium">{ratingLabel[rating]}</span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Comment */}
-                <div>
-                  <label className="block text-xs font-semibold text-brown-mid mb-1.5 uppercase tracking-wide">
-                    Your Review *
+                    Message *
                   </label>
                   <textarea
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
                     rows={5}
-                    placeholder="Tell us about your experience with AfroPedia — what helped you most, what you'd love to see, anything at all..."
+                    placeholder="Describe the bug, suggestion, or anything else in detail..."
                     className="w-full px-4 py-3 text-sm rounded-xl border border-ivory-dark bg-ivory focus:outline-none focus:border-terracotta focus:ring-1 focus:ring-terracotta text-mahogany placeholder:text-brown-light transition-all resize-none"
                   />
                   <div className="flex justify-between mt-1">
-                    <span className={`text-xs ${comment.length < 20 && comment.length > 0 ? 'text-red-400' : 'text-brown-light'}`}>
-                      Minimum 20 characters
+                    <span className={`text-xs ${message.length > 0 && message.length < 20 ? 'text-red-400' : 'text-brown-light'}`}>
+                      Min. 20 characters
                     </span>
-                    <span className="text-xs text-brown-light">{comment.length}</span>
+                    <span className="text-xs text-brown-light">{message.length}</span>
                   </div>
                 </div>
 
-                <Button
-                  type="submit"
-                  variant="primary"
-                  size="md"
-                  className="w-full flex items-center justify-center gap-2"
-                >
+                {/* Optional fields */}
+                <div className="pt-1 border-t border-ivory-dark space-y-3">
+                  <p className="text-xs text-brown-light">Optional — helps us understand context</p>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-brown-mid mb-1.5 uppercase tracking-wide">
+                      Your Name
+                    </label>
+                    <input
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="e.g. Adaeze M."
+                      className="w-full px-4 py-2.5 text-sm rounded-xl border border-ivory-dark bg-ivory focus:outline-none focus:border-terracotta focus:ring-1 focus:ring-terracotta text-mahogany placeholder:text-brown-light transition-all"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-brown-mid mb-1.5 uppercase tracking-wide">
+                      Hair Type
+                    </label>
+                    <select
+                      value={hairType}
+                      onChange={(e) => setHairType(e.target.value)}
+                      className="w-full px-4 py-2.5 text-sm rounded-xl border border-ivory-dark bg-ivory focus:outline-none focus:border-terracotta focus:ring-1 focus:ring-terracotta text-mahogany transition-all appearance-none cursor-pointer"
+                    >
+                      {HAIR_TYPE_OPTIONS.map((opt) => (
+                        <option key={opt} value={opt}>{opt}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <Button type="submit" variant="primary" size="md" className="w-full flex items-center justify-center gap-2">
                   <Send size={14} />
-                  {submitted ? 'Review Submitted!' : 'Submit Review'}
+                  Submit Feedback
                 </Button>
               </form>
             </div>
           </div>
 
-          {/* ── Right column: reviews list ─────────────────────────────────── */}
-          <div className="lg:col-span-2">
-            <div className="flex items-center justify-between mb-6">
+          {/* ── Right: feed ────────────────────────────────────────────────── */}
+          <div className="lg:col-span-3">
+            <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
               <h2
                 style={{ fontFamily: '"Playfair Display", Georgia, serif' }}
                 className="text-2xl font-bold text-mahogany"
               >
-                Community Reviews
+                Recent Feedback
               </h2>
-              <span className="text-sm text-brown-light">{reviews.length} reviews</span>
+              <span className="text-sm text-brown-light">{filtered.length} item{filtered.length !== 1 ? 's' : ''}</span>
             </div>
 
-            <div className="space-y-4">
-              {reviews.map((feedback) => (
-                <FeedbackCard
-                  key={feedback.id}
-                  feedback={feedback}
-                  onHelpful={handleHelpful}
-                />
-              ))}
+            {/* Filter pills */}
+            <div className="flex items-center gap-2 flex-wrap mb-6">
+              <Tag size={13} className="text-brown-light flex-shrink-0" />
+              <button
+                onClick={() => setActiveFilter('all')}
+                className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
+                  activeFilter === 'all'
+                    ? 'bg-mahogany text-white'
+                    : 'bg-white border border-ivory-dark text-brown-mid hover:border-mahogany hover:text-mahogany'
+                }`}
+              >
+                All
+              </button>
+              {CATEGORIES.map((cat) => {
+                const meta = CATEGORY_META[cat.value]
+                const active = activeFilter === cat.value
+                return (
+                  <button
+                    key={cat.value}
+                    onClick={() => setActiveFilter(cat.value)}
+                    className={`flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border transition-all ${
+                      active
+                        ? `${meta.bg} ${meta.text} ${meta.border}`
+                        : 'bg-white border-ivory-dark text-brown-mid hover:border-brown-light'
+                    }`}
+                  >
+                    {meta.icon}
+                    {cat.label}
+                  </button>
+                )
+              })}
             </div>
+
+            {filtered.length === 0 ? (
+              <div className="text-center py-16 bg-white rounded-2xl border border-ivory-dark">
+                <MessageSquare size={36} className="text-ivory-dark mx-auto mb-3" />
+                <p className="text-brown-mid font-medium">No feedback in this category yet</p>
+                <p className="text-brown-light text-sm mt-1">Be the first to share something!</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {filtered.map((item) => (
+                  <FeedbackItem key={item.id} item={item} />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
