@@ -7,6 +7,8 @@ import { HairTypesPage } from './pages/HairTypesPage'
 import { ArticlePage } from './pages/ArticlePage'
 import { ArticlesPage } from './pages/ArticlesPage'
 import { GlossaryPage } from './pages/GlossaryPage'
+import { MarketplacePage } from './pages/MarketplacePage'
+import { FeedbackPage } from './pages/FeedbackPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { ThemeProvider } from './context/ThemeContext'
 import { FontSizeProvider } from './context/FontSizeContext'
@@ -25,6 +27,8 @@ function App() {
                 <Route path="/articles" element={<ArticlesPage />} />
                 <Route path="/article/:slug" element={<ArticlePage />} />
                 <Route path="/glossary" element={<GlossaryPage />} />
+                <Route path="/marketplace" element={<MarketplacePage />} />
+                <Route path="/feedback" element={<FeedbackPage />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </main>

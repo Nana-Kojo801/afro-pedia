@@ -36,6 +36,8 @@ export function Navbar() {
     { label: 'Hair Types', to: '/hair-types' },
     { label: 'Articles', to: '/articles' },
     { label: 'Glossary', to: '/glossary' },
+    { label: 'Marketplace', to: '/marketplace' },
+    { label: 'Feedback', to: '/feedback' },
   ]
 
   return (
